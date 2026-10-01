@@ -28,11 +28,11 @@ jobs:
       - name: Package updater asset
         shell: pwsh
         run: Compress-Archive -Path dist/MediaLibraryDatabase/* -DestinationPath Media-Library-Database-update.zip -Force
-      - name: Publish v2.4.4
+      - name: Publish v2.4.5
         if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v2.4.4
+          tag_name: v2.4.5
           files: Media-Library-Database-update.zip
           generate_release_notes: true
       - name: Publish tagged release
