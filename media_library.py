@@ -301,8 +301,13 @@ class MainWindow(QMainWindow):
         self.table=QTableWidget(0,10); self.table.setHorizontalHeaderLabels(['Title','Year','Series','S/E','Type','Size','Duration','Resolution','Modified','Folder']); self.table.setSelectionBehavior(QAbstractItemView.SelectRows); self.table.setEditTriggers(QAbstractItemView.NoEditTriggers); self.table.setSortingEnabled(True); self.table.horizontalHeader().setSectionResizeMode(0,QHeaderView.Stretch); self.table.horizontalHeader().setSectionResizeMode(9,QHeaderView.Stretch); self.table.doubleClicked.connect(self.open_selected); self.table.itemSelectionChanged.connect(self.table_selected); self.stack.addWidget(self.table)
         self.tv_tree=QTreeWidget(); self.tv_tree.setHeaderLabels(['Series / Season / Episode','Year','Duration']); self.tv_tree.itemDoubleClicked.connect(self.tree_open); self.stack.addWidget(self.tv_tree)
         self.tabs.addTab(self.library_tab,'Library')
-        self.details_tab=QWidget(); dl=QVBoxLayout(self.details_tab); self.hero=QLabel('Select an item'); self.hero.setAlignment(Qt.AlignCenter); self.hero.setMinimumHeight(400); self.hero.setWordWrap(True); dl.addWidget(self.hero,1); acts=QHBoxLayout();
-        for text_,fn in [('Open Media',self.open_selected),('Open Folder',self.open_folder),('Full Details',self.details),('Edit Metadata',self.edit_metadata),('Set as Movie',self.set_movie),('Set as TV Show',self.set_tv),('Auto Detect Type',self.clear_type_override),('Fix Match',self.fix_match),('Enter TMDB ID',self.enter_tmdb_id),('Clear Match',self.clear_match),('Refresh Metadata',self.fetch_selected_metadata)]:
+        self.details_tab=QWidget(); dl=QVBoxLayout(self.details_tab); self.hero=QLabel('Select an item'); self.hero.setAlignment(Qt.AlignCenter); self.hero.setMinimumHeight(400); self.hero.setWordWrap(True); dl.addWidget(self.hero,1)
+        identification=QGroupBox('Identification'); ident=QHBoxLayout(identification)
+        for text_,fn in [('Fix Match',self.fix_match),('Enter TMDB ID',self.enter_tmdb_id),('Clear Match',self.clear_match),('Refresh Metadata',self.fetch_selected_metadata)]:
+            b=QPushButton(text_); b.clicked.connect(fn); ident.addWidget(b)
+        dl.addWidget(identification)
+        acts=QHBoxLayout()
+        for text_,fn in [('Open Media',self.open_selected),('Open Folder',self.open_folder),('Full Details',self.details),('Edit Metadata',self.edit_metadata),('Set as Movie',self.set_movie),('Set as TV Show',self.set_tv),('Auto Detect Type',self.clear_type_override)]:
             b=QPushButton(text_); b.clicked.connect(fn); acts.addWidget(b)
         dl.addLayout(acts); self.tabs.addTab(self.details_tab,'Selected Item')
         self.progress=QProgressBar(); self.progress.hide(); outer.addWidget(self.progress); self.status=QLabel(); outer.addWidget(self.status)
