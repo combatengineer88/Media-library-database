@@ -46,14 +46,15 @@ jobs:
         run: Compress-Archive -Path dist/MediaLibraryDatabase/* -DestinationPath Media-Library-Database-update.zip -Force
 
       - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v2.4.2
           files: Media-Library-Database-update.zip
           generate_release_notes: true
 
       - name: Upload manual-build artifact
-        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        if: github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/v')
         uses: actions/upload-artifact@v4
         with:
           name: Media-Library-Database-update
