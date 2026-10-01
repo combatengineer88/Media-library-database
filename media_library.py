@@ -10,7 +10,7 @@ from PySide6.QtGui import QDesktopServices, QPixmap, QIcon
 from PySide6.QtWidgets import (QApplication,QMainWindow,QWidget,QVBoxLayout,QHBoxLayout,QPushButton,QLineEdit,
     QFileDialog,QTableWidget,QTableWidgetItem,QHeaderView,QLabel,QComboBox,QMessageBox,QProgressBar,
     QListWidget,QSplitter,QAbstractItemView,QFormLayout,QDialog,QDialogButtonBox,QStackedWidget,
-    QScrollArea,QGridLayout,QFrame,QTabWidget,QCheckBox,QInputDialog,QTreeWidget,QTreeWidgetItem)
+    QScrollArea,QGridLayout,QFrame,QGroupBox,QTabWidget,QCheckBox,QInputDialog,QTreeWidget,QTreeWidgetItem)
 
 APP_DIR = Path(os.getenv('LOCALAPPDATA', Path.home())) / 'MediaLibraryDB'
 APP_DIR.mkdir(parents=True, exist_ok=True)
