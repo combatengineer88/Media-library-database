@@ -16,57 +16,28 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Restore application source
-        shell: pwsh
-        run: |
-          $b64 = (Get-Content source/media_library.py.gz.b64 -Raw).Trim()
-          [IO.File]::WriteAllBytes("media_library.py.gz", [Convert]::FromBase64String($b64))
-          $in = [IO.File]::OpenRead("media_library.py.gz")
-          $gz = New-Object IO.Compression.GzipStream($in, [IO.Compression.CompressionMode]::Decompress)
-          $out = [IO.File]::Create("media_library.py")
-          $gz.CopyTo($out)
-          $out.Dispose(); $gz.Dispose(); $in.Dispose()
-
-      - name: Apply v2.4.3 source migration
-        run: python tools/patch_v243.py
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
       - name: Install dependencies
         run: pip install -r requirements.txt pyinstaller
-
-      - name: Commit normal editable source
-        if: github.ref == 'refs/heads/main'
-        shell: pwsh
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add media_library.py
-          git diff --cached --quiet; if ($LASTEXITCODE -ne 0) { git commit -m "Store normal editable v2.4.3 application source"; git push }
-
       - name: Validate source
         run: python -m py_compile media_library.py updater.py
-
       - name: Build application
         run: pyinstaller --noconfirm --clean --windowed --name MediaLibraryDatabase media_library.py
-
       - name: Package updater asset
         shell: pwsh
         run: Compress-Archive -Path dist/MediaLibraryDatabase/* -DestinationPath Media-Library-Database-update.zip -Force
-
-      - name: Publish GitHub Release
+      - name: Publish v2.4.3
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v2.4.3
+          files: Media-Library-Database-update.zip
+          generate_release_notes: true
+      - name: Publish tagged release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: Media-Library-Database-update.zip
           generate_release_notes: true
-
-      - name: Upload manual-build artifact
-        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: Media-Library-Database-update
-          path: Media-Library-Database-update.zip
