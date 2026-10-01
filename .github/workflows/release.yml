@@ -23,16 +23,21 @@ jobs:
         run: pip install -r requirements.txt pyinstaller
       - name: Validate source
         run: python -m py_compile media_library.py updater.py
+      - name: UI import smoke test
+        shell: pwsh
+        run: |
+          $env:QT_QPA_PLATFORM = "offscreen"
+          python -c "import media_library; app=media_library.QApplication([]); w=media_library.MainWindow(); print(w.windowTitle()); w.close()"
       - name: Build application
         run: pyinstaller --noconfirm --clean --windowed --name MediaLibraryDatabase media_library.py
       - name: Package updater asset
         shell: pwsh
         run: Compress-Archive -Path dist/MediaLibraryDatabase/* -DestinationPath Media-Library-Database-update.zip -Force
-      - name: Publish v2.4.5
+      - name: Publish v2.4.6
         if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v2.4.5
+          tag_name: v2.4.6
           files: Media-Library-Database-update.zip
           generate_release_notes: true
       - name: Publish tagged release
