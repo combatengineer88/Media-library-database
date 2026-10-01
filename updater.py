@@ -2,7 +2,7 @@ import os, sys, re, json, hashlib, shutil, subprocess
 from pathlib import Path
 from urllib.request import Request, urlopen
 
-APP_VERSION='2.4.0'
+APP_VERSION='2.4.1'
 UPDATE_REPO='combatengineer88/Media-library-database'
 UPDATE_API=f'https://api.github.com/repos/{UPDATE_REPO}/releases/latest'
 
