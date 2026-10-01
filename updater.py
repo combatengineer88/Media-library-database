@@ -3,7 +3,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
 
-APP_VERSION='2.4.3'
+APP_VERSION='2.4.4'
 UPDATE_REPO='combatengineer88/Media-library-database'
 UPDATE_API=f'https://api.github.com/repos/{UPDATE_REPO}/releases/latest'
 
