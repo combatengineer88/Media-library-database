@@ -51,7 +51,7 @@ jobs:
           generate_release_notes: true
 
       - name: Upload manual-build artifact
-        if: \${{ !startsWith(github.ref, 'refs/tags/v') }}
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         uses: actions/upload-artifact@v4
         with:
           name: Media-Library-Database-update
