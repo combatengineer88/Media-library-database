@@ -1,8 +1,9 @@
 import os, sys, re, json, hashlib, shutil, subprocess
 from pathlib import Path
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError, URLError
 
-APP_VERSION='2.4.1'
+APP_VERSION='2.4.2'
 UPDATE_REPO='combatengineer88/Media-library-database'
 UPDATE_API=f'https://api.github.com/repos/{UPDATE_REPO}/releases/latest'
 
@@ -10,9 +11,20 @@ def version_tuple(v):
     nums=re.findall(r'\d+',str(v)); nums=(nums+['0','0','0'])[:3]
     return tuple(map(int,nums))
 
+class NoPublishedRelease(Exception):
+    pass
+
 def latest_release():
     req=Request(UPDATE_API,headers={'User-Agent':f'MediaLibraryDatabase/{APP_VERSION}','Accept':'application/vnd.github+json'})
-    with urlopen(req,timeout=12) as r: return json.load(r)
+    try:
+        with urlopen(req,timeout=12) as r:
+            return json.load(r)
+    except HTTPError as e:
+        if e.code == 404:
+            raise NoPublishedRelease('No published releases are available yet.') from e
+        raise RuntimeError(f'GitHub returned HTTP {e.code} while checking for updates.') from e
+    except URLError as e:
+        raise RuntimeError(f'Could not connect to GitHub: {e.reason}') from e
 
 def find_update_asset(release):
     assets=release.get('assets',[])
