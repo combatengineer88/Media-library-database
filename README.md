@@ -3,7 +3,7 @@
 Windows desktop media catalog with local SQLite storage, TMDB metadata matching, TV Series → Season → Episode organization, manual Fix Match, and built-in GitHub release updates.
 
 ## Current version
-2.4.0
+2.4.1
 
 ## Update channel
 The desktop app checks this repository's **latest GitHub Release**. Release tags use `vMAJOR.MINOR.PATCH` and the updater expects an asset named:
